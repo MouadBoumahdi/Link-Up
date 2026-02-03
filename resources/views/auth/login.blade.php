@@ -4,325 +4,180 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - {{ config('app.name', 'Laravel') }}</title>
-    
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
-
-        .login-container {
-            width: 100%;
-            max-width: 400px;
-            background: white;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-            overflow: hidden;
-        }
-
-        .login-header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 40px 30px;
-            text-align: center;
-        }
-
-        .login-header h1 {
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .login-header p {
-            opacity: 0.9;
-            font-size: 14px;
-        }
-
-        .login-body {
-            padding: 40px 30px;
-        }
-
-        .form-group {
-            margin-bottom: 24px;
-        }
-
-        .form-label {
-            display: block;
-            font-size: 14px;
-            font-weight: 500;
-            color: #333;
-            margin-bottom: 8px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid #e1e5e9;
-            border-radius: 8px;
-            font-size: 16px;
-            transition: all 0.3s ease;
-            outline: none;
-        }
-
-        .form-input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-        }
-
-        .form-input::placeholder {
-            color: #a0aec0;
-        }
-
-        .error-message {
-            color: #e53e3e;
-            font-size: 14px;
-            margin-top: 6px;
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-
-        .error-message::before {
-            content: "⚠";
-        }
-
-        .remember-forgot {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-
-        .remember-me {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .remember-me input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            border: 2px solid #cbd5e0;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .remember-me input[type="checkbox"]:checked {
-            background-color: #667eea;
-            border-color: #667eea;
-        }
-
-        .remember-me label {
-            font-size: 14px;
-            color: #4a5568;
-            cursor: pointer;
-        }
-
-        .forgot-password {
-            font-size: 14px;
-            color: #667eea;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .forgot-password:hover {
-            color: #5a67d8;
-            text-decoration: underline;
-        }
-
-        .login-button {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-
-        .login-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.2);
-        }
-
-        .login-button:active {
-            transform: translateY(0);
-        }
-
-        .register-link {
-            text-align: center;
-            margin-top: 24px;
-            font-size: 14px;
-            color: #718096;
-        }
-
-        .register-link a {
-            color: #667eea;
-            text-decoration: none;
-            font-weight: 500;
-        }
-
-        .register-link a:hover {
-            text-decoration: underline;
-        }
-
-        .success-message {
-            background: #c6f6d5;
-            color: #22543d;
-            padding: 12px 16px;
-            border-radius: 8px;
-            margin-bottom: 24px;
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .success-message::before {
-            content: "✓";
-            font-weight: bold;
-        }
-
-        /* Responsive */
-        @media (max-width: 480px) {
-            .login-container {
-                max-width: 100%;
-            }
-            
-            .login-header,
-            .login-body {
-                padding: 30px 20px;
-            }
-            
-            .remember-forgot {
-                flex-direction: column;
-                gap: 16px;
-                align-items: flex-start;
-            }
-        }
-
-        /* Dark mode support */
-        @media (prefers-color-scheme: dark) {
-            body {
-                background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
-            }
-
-            .login-container {
-                background: #1a202c;
-                color: #e2e8f0;
-            }
-
-            .form-label {
-                color: #e2e8f0;
-            }
-
-            .form-input {
-                background: #2d3748;
-                border-color: #4a5568;
-                color: #e2e8f0;
-            }
-
-            .form-input:focus {
-                border-color: #667eea;
-            }
-
-            .remember-me label {
-                color: #cbd5e0;
-            }
-
-            .register-link {
-                color: #a0aec0;
-            }
-        }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
-<body>
-    <div class="login-container">
-        <div class="login-header">
-            <h1>Welcome Back</h1>
-            <p>Sign in to your account to continue</p>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-md">
+        <!-- Logo -->
+        <div class="text-center mb-8">
+            <h1 class="text-2xl font-bold text-black">
+                <i class="fas fa-rocket mr-2"></i>
+                {{ config('app.name', 'Laravel') }}
+            </h1>
         </div>
-        <div class="login-body">
 
-            <form method="POST" action="{{ route('login') }}">
-                @csrf
+        <!-- Login Card -->
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200">
+            <!-- Header -->
+            <div class="bg-black text-white p-6 rounded-t-lg">
+                <h2 class="text-xl font-semibold">Welcome Back</h2>
+                <p class="text-gray-300 text-sm mt-1">Sign in to continue</p>
+            </div>
 
-                <!-- Email Address -->
-                <div class="form-group">
-                    <label for="email" class="form-label">Email Address</label>
-                    <input 
-                        id="email" 
-                        type="email" 
-                        name="email" 
-                        value="{{ old('email') }}" 
-                        class="form-input" 
-                        placeholder="Enter your email"
-                        required 
-                        autofocus 
-                        autocomplete="username"
-                    >
-                    @error('email')
-                        <div class="error-message">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <!-- Password -->
-                <div class="form-group">
-                    <label for="password" class="form-label">Password</label>
-                    <input 
-                        id="password" 
-                        type="password" 
-                        name="password" 
-                        class="form-input" 
-                        placeholder="Enter your password"
-                        required 
-                        autocomplete="current-password"
-                    >
-                    @error('password')
-                        <div class="error-message">{{ $message }}</div>
-                    @enderror
-                </div>
-
-                <div class="remember-forgot">
-                    <div class="remember-me">
-                        <input id="remember_me" type="checkbox" name="remember">
-                        <label for="remember_me">Remember me</label>
+            <!-- Form -->
+            <div class="p-6">
+                @if($errors->any())
+                    <div class="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-exclamation-triangle text-red-600 mr-3"></i>
+                            <p class="text-sm text-red-800">Invalid email or password</p>
+                        </div>
                     </div>
-                    
-                    @if (Route::has('password.request'))
-                        <a href="{{ route('password.request') }}" class="forgot-password">
-                            Forgot password?
-                        </a>
-                    @endif
-                </div>
+                @endif
 
-                <button type="submit" class="login-button">
-                    Sign In
-                </button>
-            </form>
+                @if(session('status'))
+                    <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-4">
+                        <div class="flex items-center">
+                            <i class="fas fa-check-circle text-green-600 mr-3"></i>
+                            <p class="text-sm text-green-800">{{ session('status') }}</p>
+                        </div>
+                    </div>
+                @endif
 
-            @if (Route::has('register'))
-                <div class="register-link">
-                    Don't have an account? 
-                    <a href="{{ route('register') }}">Create one now</a>
+                <form method="POST" action="{{ route('login') }}">
+                    @csrf
+
+                    <!-- Email -->
+                    <div class="mb-4">
+                        <label class="block text-sm font-medium text-gray-900 mb-2">
+                            Email Address
+                            <span class="text-red-600">*</span>
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-envelope text-gray-500"></i>
+                            </div>
+                            <input 
+                                id="email" 
+                                type="email" 
+                                name="email" 
+                                value="{{ old('email') }}"
+                                class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white"
+                                placeholder="john@example.com"
+                                required
+                                autofocus
+                            >
+                        </div>
+                        @error('email')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Password -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium text-gray-900 mb-2">
+                            Password
+                            <span class="text-red-600">*</span>
+                        </label>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                <i class="fas fa-lock text-gray-500"></i>
+                            </div>
+                            <input 
+                                id="password" 
+                                type="password" 
+                                name="password"
+                                class="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-transparent bg-white"
+                                placeholder="••••••••"
+                                required
+                            >
+                            <button type="button" class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-500 hover:text-gray-700" onclick="togglePassword('password')">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </div>
+                        @error('password')
+                            <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Remember & Forgot -->
+                    <div class="flex items-center justify-between mb-6">
+                        <div class="flex items-center">
+                            <input 
+                                type="checkbox" 
+                                id="remember_me" 
+                                name="remember"
+                                class="h-4 w-4 border border-gray-300 rounded focus:ring-gray-500 text-black"
+                            >
+                            <label for="remember_me" class="ml-2 block text-sm text-gray-700">
+                                Remember me
+                            </label>
+                        </div>
+
+                        @if (Route::has('password.request'))
+                            <a href="{{ route('password.request') }}" class="text-sm text-black font-medium hover:underline">
+                                Forgot password?
+                            </a>
+                        @endif
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="w-full bg-black hover:bg-gray-800 text-white font-medium py-3 px-4 rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-800 transition-colors">
+                        <i class="fas fa-sign-in-alt mr-2"></i>
+                        Sign In
+                    </button>
+                </form>
+
+                <!-- Register Link -->
+                <div class="mt-6 pt-6 border-t border-gray-200 text-center">
+                    <p class="text-sm text-gray-600">
+                        Don't have an account?
+                        <a href="{{ route('register') }}" class="font-medium text-black hover:underline ml-1">Create one</a>
+                    </p>
                 </div>
-            @endif
+            </div>
         </div>
     </div>
+
+    <script>
+        function togglePassword(fieldId) {
+            const field = document.getElementById(fieldId);
+            const icon = field.parentElement.querySelector('i');
+            if (field.type === 'password') {
+                field.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                field.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+
+        // Form validation on input
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            const button = form.querySelector('button[type="submit"]');
+
+            function validateForm() {
+                const email = emailInput.value.trim();
+                const password = passwordInput.value;
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                
+                const isValid = emailRegex.test(email) && password.length >= 1;
+                button.disabled = !isValid;
+            }
+
+            // Add input event listeners
+            emailInput.addEventListener('input', validateForm);
+            passwordInput.addEventListener('input', validateForm);
+
+            // Initial validation
+            validateForm();
+        });
+    </script>
 </body>
 </html>
