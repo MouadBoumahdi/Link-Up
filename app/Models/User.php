@@ -2,20 +2,18 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
 
     /**
      * The attributes that are mass assignable.
      *
-     * @var list<string>
+     * @var array<int, string>
      */
     protected $fillable = [
         'name',
@@ -23,26 +21,49 @@ class User extends Authenticatable
         'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    // ========== ADD THESE 4 METHODS ==========
+    
+    // 1. Get friend requests sent by this user
+    public function sentFriendRequests()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->hasMany(Friendship::class, 'sender_id');
+    }
+
+    // 2. Get friend requests received by this user
+    public function receivedFriendRequests()
+    {
+        return $this->hasMany(Friendship::class, 'receiver_id');
+    }
+
+    // 3. Check if friendship exists with another user
+    public function friendshipWith(User $user)
+    {
+        return \App\Models\Friendship::where(function($query) use ($user) {
+                $query->where('sender_id', $this->id)
+                      ->where('receiver_id', $user->id);
+            })
+            ->orWhere(function($query) use ($user) {
+                $query->where('sender_id', $user->id)
+                      ->where('receiver_id', $this->id);
+            })
+            ->first();
+    }
+
+    // 4. Get all accepted friends
+    public function friends()
+    {
+        $acceptedAsSender = $this->sentFriendRequests()
+            ->where('status', 'accepted')
+            ->get()
+            ->pluck('receiver_id');
+
+        $acceptedAsReceiver = $this->receivedFriendRequests()
+            ->where('status', 'accepted')
+            ->get()
+            ->pluck('sender_id');
+
+        $friendIds = $acceptedAsSender->merge($acceptedAsReceiver);
+
+        return User::whereIn('id', $friendIds);
     }
 }

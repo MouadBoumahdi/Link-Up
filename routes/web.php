@@ -1,11 +1,15 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\FriendController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::post('/friends/request/{user}', [FriendController::class, 'send'])->name('friends.request');
+Route::get('/friends/search', [FriendController::class, 'search'])->name('friends.search');
 
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -16,5 +20,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// Add this route
+Route::get('/friends', [FriendController::class, 'index'])->name('friends.index');
+Route::get('/friends/search', [FriendController::class, 'search'])->name('friends.search');
+Route::post('/friends/send/{user}', [FriendController::class, 'sendRequest'])->name('friends.send');
+Route::post('/friends/accept/{friendship}', [FriendController::class, 'acceptRequest'])->name('friends.accept');
+Route::post('/friends/reject/{friendship}', [FriendController::class, 'rejectRequest'])->name('friends.reject');
+Route::post('/friends/cancel/{friendship}', [FriendController::class, 'cancelRequest'])->name('friends.cancel');
 
 require __DIR__.'/auth.php';
