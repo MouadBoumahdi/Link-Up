@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FriendController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -28,5 +29,16 @@ Route::post('/friends/send/{user}', [FriendController::class, 'sendRequest'])->n
 Route::post('/friends/accept/{friendship}', [FriendController::class, 'acceptRequest'])->name('friends.accept');
 Route::post('/friends/reject/{friendship}', [FriendController::class, 'rejectRequest'])->name('friends.reject');
 Route::post('/friends/cancel/{friendship}', [FriendController::class, 'cancelRequest'])->name('friends.cancel');
+
+
+
+// Post routes
+Route::middleware('auth')->group(function () {
+    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    Route::post('/posts/{post}/like', [PostController::class, 'like'])->name('posts.like');
+    Route::post('/posts/{post}/comment', [PostController::class, 'comment'])->name('posts.comment');
+    Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+});
+
 
 require __DIR__.'/auth.php';
