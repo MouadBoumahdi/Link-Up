@@ -38,6 +38,8 @@ Route::middleware('auth')->group(function () {
     Route::post('/posts/{post}/like', [PostController::class, 'like'])->name('posts.like');
     Route::post('/posts/{post}/comment', [PostController::class, 'comment'])->name('posts.comment');
     Route::delete('/posts/{post}', [PostController::class, 'destroy'])->name('posts.destroy');
+    Route::put('/posts/{post}', [PostController::class, 'update'])->name('posts.update');
+
 });
 
 

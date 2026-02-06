@@ -98,4 +98,24 @@ class PostController extends Controller
 
         return back()->with('success', 'Post deleted successfully!');
     }
+
+
+    // Add this method to your PostController
+    public function update(Request $request, Post $post)
+    {
+        // Check if user owns the post
+        if ($post->user_id !== Auth::id()) {
+            return back()->with('error', 'Unauthorized action.');
+        }
+
+        $request->validate([
+            'content' => 'required|string|max:1000',
+        ]);
+
+        $post->update([
+            'content' => $request->content,
+        ]);
+
+        return back()->with('success', 'Post updated successfully!');
+    }
 }
